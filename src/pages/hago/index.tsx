@@ -54,7 +54,7 @@ function App() {
   }
 
   // Fungsi untuk menangani perubahan input
-  function handleChange(event: any) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
   }
 
