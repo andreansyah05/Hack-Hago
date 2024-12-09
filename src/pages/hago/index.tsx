@@ -1,50 +1,13 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-const kincir = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "",
-  "",
-  "",
-  "",
-  "1",
-  "2",
-  "3",
-  "4",
-  "1",
-  "2",
-  "3",
-  "4",
-  "",
-  "",
-  "",
-  "",
-  "1",
-  "2",
-  "3",
-  "4",
-  "1",
-  "2",
-  "3",
-  "4",
-  "",
-  "",
-  "",
-  "",
-  "1",
-  "2",
-  "3",
-  "4",
-];
+const kincir = ["1", "2", "3", "4", "", "", "", ""];
 
 function App() {
   const [name, setName] = useState("Kincir Ludo / Dm");
-  const [history, setHistory] = useState<{ name: string; result: string[] }[]>(
-    []
-  );
+  const [history, setHistory] = useState<
+    { name: string; result: string[]; time: string }[]
+  >([]);
 
   // Fungsi untuk menghasilkan kincir secara acak berdasarkan waktu
   function getRandomKincirBasedOnTime() {
@@ -53,7 +16,7 @@ function App() {
     const minutes = currentTime.getMinutes(); // Mendapatkan menit saat ini
     const seconds = currentTime.getSeconds(); // Mendapatkan detik saat ini
 
-    // Menghitung total detik berdasarkan menit dan detik saat ini
+    //Menghitung total detik berdasarkan menit dan detik saat ini
 
     const timeFactor = hours + minutes + seconds - 10;
     const randomIndex = timeFactor % kincir.length;
@@ -92,17 +55,17 @@ function App() {
     // }, 50); // Set timeout untuk auto-refresh setelah 1 detik
 
     const kincir = getRandomKincirBasedOnTime();
+    const currentTime = new Date().toLocaleString(); // Mendapatkan waktu lokal sebagai string
 
-    // Menambahkan data ke dalam history
-    setHistory([{ name: name, result: kincir }, ...history]);
+    // Menambahkan data ke dalam history dengan waktu
+    setHistory([{ name: name, result: kincir, time: currentTime }, ...history]);
 
     Swal.fire({
       icon: "success",
       title: "Hasil Kincir",
       text: `Hasilnya adalah: ${kincir}`,
-      timer: 1000, // waktu dalam milidetik (3000ms = 3 detik)
-      showConfirmButton: false, // menonaktifkan tombol konfirmasi
-      willClose: () => {},
+      timer: 1000,
+      showConfirmButton: false,
     });
   }
 
@@ -141,6 +104,35 @@ function App() {
     });
   }
 
+  // buatkan fungsi untuk membuar rules nya
+  const createRules = () => {
+    Swal.fire({
+      title: "Aturan Permainan",
+      html: `<ul>
+          <li style="margin-bottom: 15px;">1. Kamu akan diminta input nama Anda</li>
+          <li style="margin-bottom: 15px;">2. Ketik nama Anda sesuai yang kamu inginkan</li>
+          <li style="margin-bottom: 15px;">3. Klik "CHECK" di waktu sisa 5 detik untuk mendapatkan kincir yang acak</li>
+          <li style="margin-bottom: 15px;">4. Lihat hasil kincir dan tunggu popup hilang automatis" untuk melanjutkan permainan</li>
+          <li style="margin-bottom: 15px;">5. Kamu dapat melihat riwayat hasil kincir di bawah</li>
+          <li style="margin-bottom: 15px;">6. Klik "Hapus Riwayat" untuk menghapus seluruh riwayat</li>
+          <li style="margin-bottom: 30px;">7. Klik "Aturan" untuk melihat aturan permainan</li>
+           <li style="margin-bottom: 10px;"> PERHATIAN !!! </li>
+          <li style="margin-bottom: ;"> Hack kincir ini tidak berlaku pada angka kolom di garis bawah seperti 5 , 6 , 7 , 8 </li>
+        </ul>`,
+      confirmButtonText: "OK",
+      showCancelButton: false,
+      width: 600,
+      padding: "20px",
+      customClass: {
+        title: "font-bold text-center",
+        htmlContainer:
+          "text-center text-sm sm:text-base md:text-lg text-color-red-500",
+      },
+      showCloseButton: true,
+      showConfirmButton: false,
+    });
+  };
+
   return (
     <div className="bg-[url('https://i.gifer.com/J4o.gif')] min-h-screen flex items-center justify-center p-4">
       <div className=" bg-gray-800 p-8 rounded-lg shadow-md w-screen max-w-lg sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-full ">
@@ -163,8 +155,7 @@ function App() {
         >
           CHECK
         </button>
-        <div className=" flex items-center justify-center p-4">
-          {/* Menampilkan tombol atau event yang memicu SweetAlert */}
+        <div className="flex items-center justify-center p-4">
           <button
             onClick={showSwal}
             className="bg-blue-500 text-white p-4 rounded-md text-sm sm:text-base md:text-lg hover:bg-green-500 transition duration-300"
@@ -177,6 +168,12 @@ function App() {
           >
             Delete history
           </button>
+          <button
+            onClick={createRules}
+            className="bg-yellow-500 text-white p-4 rounded-md text-sm sm:text-base md:text-lg hover:bg-green-700 transition duration-300 ml-3"
+          >
+            Aturan Bermain
+          </button>
         </div>
         <div className="mt-8">
           <h2 className="text-xl font-semibold text-white mb-4">
@@ -185,12 +182,12 @@ function App() {
           <div className="space-y-4">
             {history.length > 0 ? (
               history.map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-700 p-4 rounded-md text-white"
-                >
+                <div key={index} className=" p-4 rounded-md text-green-500">
                   <strong>{item.name}</strong>
                   <div>Hasil: {item.result.join(", ")}</div>
+                  <div className=" text-sm text-red-500">
+                    Waktu: {item.time}
+                  </div>
                 </div>
               ))
             ) : (
