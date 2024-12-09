@@ -1,30 +1,78 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-const kincir = ["1", "2", "3", "4", "1", "2", "3", "4"];
+const kincir = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "",
+  "",
+  "",
+  "",
+  "1",
+  "2",
+  "3",
+  "4",
+  "1",
+  "2",
+  "3",
+  "4",
+  "",
+  "",
+  "",
+  "",
+  "1",
+  "2",
+  "3",
+  "4",
+  "1",
+  "2",
+  "3",
+  "4",
+  "",
+  "",
+  "",
+  "",
+  "1",
+  "2",
+  "3",
+  "4",
+];
 
 function App() {
   const [name, setName] = useState("Kincir Ludo / Dm");
+  const [history, setHistory] = useState<{ name: string; result: string[] }[]>(
+    []
+  );
 
-  // Fungsi untuk menghasilkan khodam secara acak berdasarkan waktu
+  // Fungsi untuk menghasilkan kincir secara acak berdasarkan waktu
   function getRandomKincirBasedOnTime() {
     const currentTime = new Date(); // Mendapatkan waktu saat ini
+    const hours = currentTime.getHours(); // Mendapatkan jam saat ini
     const minutes = currentTime.getMinutes(); // Mendapatkan menit saat ini
     const seconds = currentTime.getSeconds(); // Mendapatkan detik saat ini
 
     // Menghitung total detik berdasarkan menit dan detik saat ini
-    const timeFactor = minutes * 60 + seconds;
+
+    const timeFactor = hours + minutes + seconds - 10;
     const randomIndex = timeFactor % kincir.length;
 
-    // Menghitung total detik berdasarkan menit dan detik saat ini
-    const timeFactor1 = minutes * 15 + seconds;
+    const timeFactor1 = hours + minutes + seconds - 15; // Menggeser detik dengan -15
     const randomIndex1 = timeFactor1 % kincir.length;
 
-    // Menghitung total detik berdasarkan menit dan detik saat ini
-    const timeFactor2 = minutes * 25 + seconds;
+    const timeFactor2 = hours + minutes + seconds - 20; // Menggeser detik dengan -20
     const randomIndex2 = timeFactor2 % kincir.length;
 
-    return [kincir[randomIndex], kincir[randomIndex1], kincir[randomIndex2]];
+    const timeFactor3 = hours + minutes + seconds - 25; // Menggeser detik dengan -5
+    const randomIndex3 = timeFactor3 % kincir.length;
+
+    return [
+      kincir[randomIndex],
+      kincir[randomIndex1],
+      kincir[randomIndex2],
+      kincir[randomIndex3],
+    ];
   }
 
   // Fungsi untuk memproses klik tombol dan melakukan validasi input
@@ -39,19 +87,36 @@ function App() {
       return;
     }
 
-    setTimeout(function () {
-      window.location.reload(); // Menyegarkan halaman setelah 1 detik
-    }, 5000); // Set timeout untuk auto-refresh setelah 1 detik
+    // setTimeout(function () {
+    //   window.location.reload(); // Menyegarkan halaman setelah 1 detik
+    // }, 50); // Set timeout untuk auto-refresh setelah 1 detik
 
     const kincir = getRandomKincirBasedOnTime();
 
-    // Tampilkan SweetAlert dengan hasil khodam
+    // Menambahkan data ke dalam history
+    setHistory([{ name: name, result: kincir }, ...history]);
+
     Swal.fire({
       icon: "success",
-      title: "Hasil Tampil",
+      title: "Hasil Kincir",
       text: `Hasilnya adalah: ${kincir}`,
+      timer: 1000, // waktu dalam milidetik (3000ms = 3 detik)
+      showConfirmButton: false, // menonaktifkan tombol konfirmasi
+      willClose: () => {},
     });
   }
+
+  // Fungsi untuk menghapus seluruh history
+  const clearHistory = () => {
+    setHistory([]); // Mengosongkan array history
+
+    // Tampilkan SweetAlert untuk konfirmasi penghapusan
+    Swal.fire({
+      icon: "info",
+      title: "History Dihapus",
+      text: "Seluruh riwayat telah dihapus.",
+    });
+  };
 
   // Fungsi untuk menangani perubahan input
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -106,6 +171,32 @@ function App() {
           >
             Tentang Aplikasi
           </button>
+          <button
+            onClick={clearHistory}
+            className="bg-red-500 text-white p-4 rounded-md text-sm sm:text-base md:text-lg hover:bg-red-700 transition duration-300 ml-3 "
+          >
+            Delete history
+          </button>
+        </div>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold text-white mb-4">
+            History Kincir
+          </h2>
+          <div className="space-y-4">
+            {history.length > 0 ? (
+              history.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-700 p-4 rounded-md text-white"
+                >
+                  <strong>{item.name}</strong>
+                  <div>Hasil: {item.result.join(", ")}</div>
+                </div>
+              ))
+            ) : (
+              <p className="text-white">Belum ada history kincir.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
