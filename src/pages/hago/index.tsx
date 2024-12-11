@@ -49,6 +49,25 @@ function App() {
       });
       return;
     }
+    if (
+      name.trim() === "kontol" ||
+      name.trim() === "Kontol" ||
+      name.trim() === "memek" ||
+      name.trim() === "Memek" ||
+      name.trim() === "peler" ||
+      name.trim() === "Peler" ||
+      name.trim() === "Penis" ||
+      name.trim() === "penis" ||
+      name.trim() === "Vagina" ||
+      name.trim() === "vagina"
+    ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Tidak boleh memasukan nama 'kelamin'",
+      });
+      return;
+    }
 
     // setTimeout(function () {
     //   window.location.reload(); // Menyegarkan halaman setelah 1 detik
@@ -111,8 +130,8 @@ function App() {
       html: `<ul>
           <li style="margin-bottom: 15px;">1. Kamu akan diminta input nama Anda</li>
           <li style="margin-bottom: 15px;">2. Ketik nama Anda sesuai yang kamu inginkan</li>
-          <li style="margin-bottom: 15px;">3. Klik "CHECK" di waktu sisa 5 detik untuk mendapatkan kincir yang acak</li>
-          <li style="margin-bottom: 15px;">4. Lihat hasil kincir dan tunggu popup hilang automatis" untuk melanjutkan permainan</li>
+          <li style="margin-bottom: 15px;">3. Klik "CHECK" di waktu sisa 0 detik selama 3x untuk mendapatkan kincir yang acak</li>
+          <li style="margin-bottom: 15px;">4. klik Lihat hasil kincir dan masukan hasil kincir di hago, masukan hasil kincir dari 3 hasil di history tersebut... tunggu popup hilang automatis" untuk melanjutkan permainan</li>
           <li style="margin-bottom: 15px;">5. Kamu dapat melihat riwayat hasil kincir di bawah</li>
           <li style="margin-bottom: 15px;">6. Klik "Hapus Riwayat" untuk menghapus seluruh riwayat</li>
           <li style="margin-bottom: 30px;">7. Klik "Aturan" untuk melihat aturan permainan</li>
@@ -182,9 +201,11 @@ function App() {
           <div className="space-y-4">
             {history.length > 0 ? (
               history.map((item, index) => (
-                <div key={index} className=" p-4 rounded-md text-green-500">
+                <div key={index} className=" p-4 rounded-md text-white">
                   <strong>{item.name}</strong>
-                  <div>Hasil: {item.result.join(", ")}</div>
+                  <div className="p-4 rounded-md text-green-500">
+                    Hasil: {item.result.join(", ")}
+                  </div>
                   <div className=" text-sm text-red-500">
                     Waktu: {item.time}
                   </div>
